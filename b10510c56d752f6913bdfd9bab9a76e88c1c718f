@@ -1,0 +1,165 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6d893387_0096cabb",
+        "filename": "README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "typo: a toy emitter",
+      "range": {
+        "startLine": 71,
+        "startChar": 9,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0b466e1f_4ae7763d",
+        "filename": "examples/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "style: missing space",
+      "range": {
+        "startLine": 189,
+        "startChar": 13,
+        "endLine": 189,
+        "endChar": 19
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "edcc297f_6be9fefe",
+        "filename": "src/base64.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "style: spaces at end of line",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 64
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b32b771a_c4830376",
+        "filename": "src/base64.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "There is a thing I did not catch here: is there a reason to decode only if we can fill a dest element? For instance in case 1, it means you have a last src element (n-1), but you do not decode it.",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 5
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "be2962a4_39785c33",
+        "filename": "src/miniyaml.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "style: spaces",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 4
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aaad6f46_28d7884a",
+        "filename": "src/miniyaml.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "Do we suppose the yaml document is well written? Or do we need to check that the XXX_START_EVENT matches the XXX_END_EVENT? Or maybe, this is not our problem here.",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 16
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1f8e2156_7340ab7e",
+        "filename": "src/miniyaml.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-12T13:53:09Z",
+      "side": 1,
+      "message": "style: spaces",
+      "range": {
+        "startLine": 323,
+        "startChar": 0,
+        "endLine": 323,
+        "endChar": 4
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
