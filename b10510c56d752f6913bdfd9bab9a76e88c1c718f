@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "fc8364eb_5923c71f",
+        "filename": "README.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-13T07:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d893387_0096cabb",
+      "range": {
+        "startLine": 71,
+        "startChar": 9,
+        "endLine": 71,
+        "endChar": 11
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0b466e1f_4ae7763d",
         "filename": "examples/parser.c",
         "patchSetId": 1
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "fcbf7799_61e8ed69",
+        "filename": "examples/parser.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-13T07:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0b466e1f_4ae7763d",
+      "range": {
+        "startLine": 189,
+        "startChar": 13,
+        "endLine": 189,
+        "endChar": 19
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "edcc297f_6be9fefe",
         "filename": "src/base64.c",
         "patchSetId": 1
@@ -59,6 +107,30 @@
       "writtenOn": "2020-05-12T13:53:09Z",
       "side": 1,
       "message": "style: spaces at end of line",
+      "range": {
+        "startLine": 30,
+        "startChar": 1,
+        "endLine": 32,
+        "endChar": 64
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "573b6952_a64ad28d",
+        "filename": "src/base64.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-13T07:50:19Z",
+      "side": 1,
+      "message": "(removed the comment in favor or a more general \"cf. RFC4648\")",
+      "parentUuid": "edcc297f_6be9fefe",
       "range": {
         "startLine": 30,
         "startChar": 1,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "5c3b0f6c_9446c13d",
+        "filename": "src/base64.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-13T07:50:19Z",
+      "side": 1,
+      "message": "My bad, I forgot to remove a lot of code in this file. (it is compiled out with #if 0 / #endif)\nFor the record, the code was there to try and get the best decoding performance without using SIMD instructions.\nI ended up going with the more \"straightforward\" implementation. We can always improve performance later, I would like a simpler bug-free implementation to start things off.\n\n\u003e is there a reason to decode only if we can fill a dest element?\n\nYes, so encoding into base64 works by taking sequences of 3 bytes and sort of stretching them to fit into 4 bytes (with the added advantage that each of those 4 bytes can be represented on 6 bits (2 ^ 6 \u003d\u003d 64)).\n\n$ printf \u0027abc\u0027 | base64\nYWJj\n$ printf \u0027abcabc\u0027 | base64\nYWJjYWJj\n\nIf the length of the input is not a multiple of 3 bytes, the last group of 2 or 1 bytes will still be \"stretched\" (1B --\u003e 2B, 2B --\u003e 3B). For multiple reasons, it is convenient to pad the output with something so that the output is still aligned on 4 bytes marks, so the base64 RFC allows padding (usually with the \u0027\u003d\u0027 character).\n\n$ printf \u0027a\u0027 | base64\nYQ\u003d\u003d\n$ printf \u0027ab\u0027 | base64\nYWI\u003d\n\nThe big switch you highlighted takes care of that last chunk of 4 bytes but with the padding removed. As you can see with the examples above, it does not make sense for any base64 encoded sequence to be only 1 byte long. This is why I fail with EILSEQ (\"Invalid or incomplete multibyte or wide character\") in this case.",
+      "parentUuid": "b32b771a_c4830376",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 5
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be2962a4_39785c33",
         "filename": "src/miniyaml.c",
         "patchSetId": 1
@@ -114,6 +210,30 @@
       "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72062f0b_ae966e74",
+        "filename": "src/miniyaml.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-13T07:50:19Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be2962a4_39785c33",
+      "range": {
+        "startLine": 20,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 4
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     },
     {
       "key": {
