@@ -22,6 +22,30 @@
       "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebd3cc90_8e8286aa",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-14T09:31:12Z",
+      "side": 1,
+      "message": "This is a header file. I don\u0027t think there should be regular static functions in header files. Anyway, this is common practice.\n\nexample from the kernel: https://elixir.bootlin.com/linux/latest/source/include/linux/list.h",
+      "parentUuid": "3c60da9b_0d064a28",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 14
+      },
+      "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
