@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3c60da9b_0d064a28",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1003874
+      },
+      "writtenOn": "2020-05-14T08:16:43Z",
+      "side": 1,
+      "message": "(nit) \"static inline\" is usually redundant as the compiler inlines static functions when necessary (unless if using low optimization levels e.g. -O0...)",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 14
+      },
+      "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
