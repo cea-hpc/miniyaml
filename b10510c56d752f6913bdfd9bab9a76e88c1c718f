@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "ad019d8d_299b2d15",
+        "filename": "src/base64.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-15T14:16:56Z",
+      "side": 1,
+      "message": "Okay, thanks for the explanation!",
+      "parentUuid": "5c3b0f6c_9446c13d",
+      "range": {
+        "startLine": 144,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 5
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "be2962a4_39785c33",
         "filename": "src/miniyaml.c",
         "patchSetId": 1
@@ -281,6 +305,30 @@
       "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "819f2b39_a724fa83",
+        "filename": "src/miniyaml.c",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-05-15T14:16:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "6696c30d_4c7794c7",
+      "range": {
+        "startLine": 59,
+        "startChar": 4,
+        "endLine": 59,
+        "endChar": 16
+      },
+      "revId": "b10510c56d752f6913bdfd9bab9a76e88c1c718f",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     },
     {
       "key": {
