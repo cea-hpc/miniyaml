@@ -46,6 +46,30 @@
       "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd2b082e_0085d4ec",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-16T13:41:41Z",
+      "side": 1,
+      "message": "To elaborate: there should not be static non-inline functions in a header file, because anywhere this header is included and the function is not explicitly used, compilers will report \"\u0027function_something\u0027 defined but not used\".",
+      "parentUuid": "ebd3cc90_8e8286aa",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 14
+      },
+      "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
