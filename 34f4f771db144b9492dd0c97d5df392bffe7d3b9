@@ -94,6 +94,30 @@
       "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "63acf235_f1f30bba",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-05-18T14:46:51Z",
+      "side": 1,
+      "message": "No problem",
+      "parentUuid": "de30a8db_992bcb9e",
+      "range": {
+        "startLine": 60,
+        "startChar": 0,
+        "endLine": 60,
+        "endChar": 14
+      },
+      "revId": "34f4f771db144b9492dd0c97d5df392bffe7d3b9",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
