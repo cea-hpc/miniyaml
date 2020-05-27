@@ -21,4 +21,5 @@ libminiyaml = library(
 # Build a .pc file
 pkg_mod = import('pkgconfig')
 pkg_mod.generate(libminiyaml,
-		 description: 'dev-friendly wrappers around libyaml')
+		 description: 'dev-friendly wrappers around libyaml',
+		 requires: libyaml.name())
