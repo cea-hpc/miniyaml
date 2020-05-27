@@ -20,8 +20,5 @@ libminiyaml = library(
 
 # Build a .pc file
 pkg_mod = import('pkgconfig')
-pkg_mod.generate(libraries: libminiyaml,
-		 version: meson.project_version(),
-		 name: 'libminiyaml',
-		 filebase: 'miniyaml',
+pkg_mod.generate(libminiyaml,
 		 description: 'dev-friendly wrappers around libyaml')
