@@ -369,6 +369,39 @@ bool
 yaml_parse_null(const yaml_event_t *event);
 
         /*------------------------------------------------------------*
+         |                          boolean                           |
+         *------------------------------------------------------------*/
+
+/**
+ * Emit a boolean
+ *
+ * @param emitter   the emitter to use
+ * @param b         the boolean to emit
+ *
+ * @return          true on success, false otherwise
+ */
+static inline bool
+yaml_emit_boolean(yaml_emitter_t *emitter, bool b)
+{
+    return yaml_emit_scalar(emitter, NULL, b ? "y" : "n", 1,
+                            YAML_PLAIN_SCALAR_STYLE);
+}
+
+/** Parse a scalar event as a boolean
+ *
+ * @param event     a scalar event
+ * @param b         a pointer to a bool; on success, it is set to the value
+ *                  \p event represents
+ *
+ * @return          true if \p event was successfully parsed as a boolean, false
+ *                  otherwise and errno is set appropriately
+ *
+ * @error EINVAL    \p event is not parsable as a boolean
+ */
+bool
+yaml_parse_boolean(const yaml_event_t *event, bool *b);
+
+        /*------------------------------------------------------------*
          |                      (signed) integer                      |
          *------------------------------------------------------------*/
 
