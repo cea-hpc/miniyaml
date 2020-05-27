@@ -227,6 +227,152 @@ out_einval:
 }
 
 bool
+yaml_parse_boolean(const yaml_event_t *event, bool *b)
+{
+    const char *value = yaml_scalar_value(event);
+    const char *tag = yaml_scalar_tag(event);
+
+    assert(event->type == YAML_SCALAR_EVENT);
+
+    if (tag ? yaml_tag2type(tag) != YT_BOOL : !yaml_scalar_is_plain(event)) {
+        errno = EINVAL;
+        return false;
+    }
+
+    switch (*value++) {
+    case 'F': /* False, FALSE */
+        switch (*value++) {
+        case 'A': /* FALSE */
+            if (strcmp(value, "LSE"))
+                break;
+            *b = false;
+            return true;
+        case 'a': /* False */
+            if (strcmp(value, "lse"))
+                break;
+            *b = false;
+            return true;
+        }
+        break;
+    case 'f': /* false */
+        if (strcmp(value, "alse"))
+            break;
+        *b = false;
+        return true;
+    case 'N': /* N, No, NO */
+        switch (*value++) {
+        case '\0': /* N */
+            *b = false;
+            return true;
+        case 'O': /* NO */
+        case 'o': /* No */
+            if (*value != '\0')
+                break;
+            *b = false;
+            return true;
+        }
+        break;
+    case 'n': /* n, no */
+        switch (*value++) {
+        case '\0': /* n */
+            *b = false;
+            return true;
+        case 'o': /* no */
+            if (*value != '\0')
+                break;
+            *b = false;
+            return true;
+        }
+        break;
+    case 'O': /* On, ON, Off, OFF */
+        switch (*value++) {
+        case 'F': /* OFF */
+            if (strcmp(value, "F"))
+                break;
+            *b = false;
+            return true;
+        case 'f': /* Off */
+            if (strcmp(value, "f"))
+                break;
+            *b = false;
+            return true;
+        case 'N': /* ON */
+        case 'n': /* On */
+            if (*value != '\0')
+                break;
+            *b = true;
+            return true;
+        }
+        break;
+    case 'o': /* on, off */
+        switch (*value++) {
+        case 'n': /* on */
+            if (*value != '\0')
+                break;
+            *b = true;
+            return true;
+        case 'f': /* off */
+            if (strcmp(value, "f"))
+                break;
+            *b = false;
+            return true;
+        }
+        break;
+    case 'T': /* True, TRUE */
+        switch (*value++) {
+        case 'R': /* TRUE */
+            if (strcmp(value, "UE"))
+                break;
+            *b = true;
+            return true;
+        case 'r': /* True */
+            if (strcmp(value, "ue"))
+                break;
+            *b = true;
+            return true;
+        }
+        break;
+    case 't': /* true */
+        if (strcmp(value, "rue"))
+            break;
+        *b = true;
+        return true;
+    case 'Y': /* Y, Yes, YES */
+        switch (*value++) {
+        case '\0': /* Y */
+            *b = true;
+            return true;
+        case 'E': /* YES */
+            if (strcmp(value, "S"))
+                break;
+            *b = true;
+            return true;
+        case 'e': /* Yes */
+            if (strcmp(value, "s"))
+                break;
+            *b = true;
+            return true;
+        }
+        break;
+    case 'y': /* y, yes */
+        switch (*value++) {
+        case '\0':
+            *b = true;
+            return true;
+        case 'e': /* yes */
+            if (strcmp(value, "s"))
+                break;
+            *b = true;
+            return true;
+        }
+        break;
+    }
+
+    errno = EINVAL;
+    return false;
+}
+
+bool
 yaml_parse_integer(const yaml_event_t *event, intmax_t *i)
 {
     const char *value = yaml_scalar_value(event);
