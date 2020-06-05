@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7790d969_9a05a3dc",
+        "filename": "src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-06-05T11:48:13Z",
+      "side": 0,
+      "message": "I did not see in the documentation that this field gets a default value.",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "5b71860721e6229198aafa60b170d4ed06a5970e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
