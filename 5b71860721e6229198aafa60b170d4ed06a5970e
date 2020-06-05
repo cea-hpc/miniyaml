@@ -22,6 +22,30 @@
       "revId": "5b71860721e6229198aafa60b170d4ed06a5970e",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4d080392_5bf59dd3",
+        "filename": "src/meson.build",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-06-05T14:38:36Z",
+      "side": 0,
+      "message": "The documentation does not say much, but the example does not include any other argument that a \"library\" object:\n\n\u003e pkg \u003d import(\u0027pkgconfig\u0027)\n\u003e bar_dep \u003d dependency(\u0027bar\u0027)\n\u003e lib \u003d library(\u0027foo\u0027, dependencies : [bar])\n\u003e pkg.generate(lib)\n\nAnd trying it out, it appears to do the right thing.\n\nref: https://mesonbuild.com/Pkgconfig-module.html",
+      "parentUuid": "7790d969_9a05a3dc",
+      "range": {
+        "startLine": 26,
+        "startChar": 3,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "5b71860721e6229198aafa60b170d4ed06a5970e",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
