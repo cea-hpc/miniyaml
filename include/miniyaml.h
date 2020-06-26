@@ -349,8 +349,7 @@ yaml_emit_scalar(yaml_emitter_t *emitter, const char *tag, const char *data,
 static inline bool
 yaml_emit_null(yaml_emitter_t *emitter)
 {
-    return yaml_emit_scalar(emitter, YAML_NULL_TAG, "", 0,
-                            YAML_ANY_SCALAR_STYLE);
+    return yaml_emit_scalar(emitter, NULL, "~", 1, YAML_ANY_SCALAR_STYLE);
 }
 
 /**
