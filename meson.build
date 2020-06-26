@@ -20,6 +20,9 @@ project(
 
 libyaml = dependency('yaml-0.1', version: '>=0.2.4')
 
+# GNU extensions
+add_project_arguments(['-D_GNU_SOURCE'], language: 'c')
+
 # Recurse in subdirectories
 
 include_dirs = include_directories('include')
