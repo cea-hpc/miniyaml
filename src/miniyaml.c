@@ -22,6 +22,7 @@ yaml_parser_skip(yaml_parser_t *parser, yaml_event_type_t last)
     size_t depth = 0;
 
     switch (last) {
+    case YAML_STREAM_START_EVENT:
     case YAML_DOCUMENT_START_EVENT:
     case YAML_MAPPING_START_EVENT:
     case YAML_SEQUENCE_START_EVENT:
@@ -38,6 +39,7 @@ yaml_parser_skip(yaml_parser_t *parser, yaml_event_type_t last)
             return false;
 
         switch (event.type) {
+        case YAML_DOCUMENT_START_EVENT:
         case YAML_MAPPING_START_EVENT:
         case YAML_SEQUENCE_START_EVENT:
             depth++;
@@ -45,6 +47,7 @@ yaml_parser_skip(yaml_parser_t *parser, yaml_event_type_t last)
         case YAML_DOCUMENT_END_EVENT:
         case YAML_MAPPING_END_EVENT:
         case YAML_SEQUENCE_END_EVENT:
+        case YAML_STREAM_END_EVENT:
             depth--;
             break;
         default:
