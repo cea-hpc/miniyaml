@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "4438eb4a_f541a891",
+        "filename": "src/base64.h",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-06-29T08:47:34Z",
+      "side": 1,
+      "message": "style: \u0027*\u0027 is missing",
+      "range": {
+        "startLine": 6,
+        "startChar": 1,
+        "endLine": 6,
+        "endChar": 2
+      },
+      "revId": "0b3192a73eb8dace43c56d8fbf8c757138890f9a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
