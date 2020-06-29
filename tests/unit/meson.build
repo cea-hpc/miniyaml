@@ -4,7 +4,7 @@
 #
 # SPDX-License-Identifer: LGPL-3.0-or-later
 
-foreach t: ['check_emit', 'check_skip']
+foreach t: ['check_emit', 'check_parse', 'check_skip']
     test(t, executable(t, t + '.c',
                        dependencies: [check, libyaml],
                        link_with: [libminiyaml],
