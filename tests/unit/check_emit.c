@@ -190,6 +190,106 @@ START_TEST(yese_tagged)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                             yaml_emit_scalar()                             |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(yesc_no_tag_plain)
+{
+    const char EXPECTED_OUTPUT[] = "--- test\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_scalar(&emitter, NULL, "test", 4,
+                               YAML_PLAIN_SCALAR_STYLE));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yesc_no_tag_quoted)
+{
+    const char EXPECTED_OUTPUT[] = "--- \"test\"\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_scalar(&emitter, NULL, "test", 4,
+                               YAML_DOUBLE_QUOTED_SCALAR_STYLE));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yesc_tagged_plain)
+{
+    const char EXPECTED_OUTPUT[] = "--- !tag test\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_scalar(&emitter, "!tag", "test", 4,
+                               YAML_PLAIN_SCALAR_STYLE));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yesc_tagged_quoted)
+{
+    const char EXPECTED_OUTPUT[] = "--- !tag \"test\"\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_scalar(&emitter, "!tag", "test", 4,
+                               YAML_DOUBLE_QUOTED_SCALAR_STYLE));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -221,6 +321,15 @@ unit_suite(void)
     tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
     tcase_add_test(tests, yese_no_tag);
     tcase_add_test(tests, yese_tagged);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_emit_scalar");
+    tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
+    tcase_add_test(tests, yesc_no_tag_plain);
+    tcase_add_test(tests, yesc_no_tag_quoted);
+    tcase_add_test(tests, yesc_tagged_plain);
+    tcase_add_test(tests, yesc_tagged_quoted);
 
     suite_add_tcase(suite, tests);
 
