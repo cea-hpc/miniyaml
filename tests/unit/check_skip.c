@@ -389,6 +389,46 @@ START_TEST(yps_error)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                          yaml_parser_skip_next()                           |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(ypsn_basic)
+{
+    const unsigned char INPUT[] = "";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_skip_next(&parser));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_NO_EVENT);
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypsn_error)
+{
+    const unsigned char INPUT[] = ":";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    /* YAML_STREAM_START_EVENT */
+    ck_assert(yaml_parser_parse(&parser, &event));
+    yaml_event_delete(&event);
+    /* YAML_DOCUMENT_START_EVENT */
+    ck_assert(yaml_parser_parse(&parser, &event));
+    yaml_event_delete(&event);
+    /* YAML_MAPPING_START_EVENT */
+    ck_assert(yaml_parser_parse(&parser, &event));
+    yaml_event_delete(&event);
+
+    ck_assert(!yaml_parser_skip_next(&parser));
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -413,6 +453,13 @@ unit_suite(void)
     tcase_add_test(tests, yps_mapping_in_sequence);
     tcase_add_test(tests, yps_sequence_in_mapping);
     tcase_add_test(tests, yps_error);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parser_skip_next");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_test(tests, ypsn_basic);
+    tcase_add_test(tests, ypsn_error);
 
     suite_add_tcase(suite, tests);
 
