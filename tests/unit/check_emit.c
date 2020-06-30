@@ -517,6 +517,79 @@ START_TEST(yeui_max)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                             yaml_emit_string()                             |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(yestri_basic)
+{
+    const char EXPECTED_OUTPUT[] = "--- \"test\"\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(YAML_EMIT_STRING(&emitter, "test"));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yestri_number)
+{
+    const char EXPECTED_OUTPUT[] = "--- \"0\"\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(YAML_EMIT_STRING(&emitter, "0"));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yestri_partial)
+{
+    const char EXPECTED_OUTPUT[] = "--- \"test\"\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_string(&emitter, "testgarbage", 4));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -585,6 +658,14 @@ unit_suite(void)
     tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
     tcase_add_test(tests, yeui_zero);
     tcase_add_test(tests, yeui_max);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_emit_string");
+    tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
+    tcase_add_test(tests, yestri_basic);
+    tcase_add_test(tests, yestri_number);
+    tcase_add_test(tests, yestri_partial);
 
     suite_add_tcase(suite, tests);
 
