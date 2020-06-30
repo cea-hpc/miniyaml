@@ -32,7 +32,7 @@ parser_exit(void)
     yaml_parser_delete(&parser);
 }
 
-/* Testing yaml_mapping_tag() is of very little value...
+/* Testing yaml_mapping_tag() and yaml_scalar_*() is of very little value...
  * But since the code is already written. One never knows, it might catch a
  * incompatible change in libyaml.
  */
@@ -89,6 +89,142 @@ START_TEST(ymt_no_tag)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              yaml_scalar_*()                               |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(ys_no_tag)
+{
+    const unsigned char INPUT[] = "abcdefgh";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert_str_eq(yaml_scalar_value(&event), "abcdefgh");
+    ck_assert_uint_eq(yaml_scalar_length(&event), 8);
+    ck_assert_ptr_null(yaml_scalar_tag(&event));
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ys_tagged)
+{
+    const unsigned char INPUT[] = "!test 'abcdefgh'";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert_str_eq(yaml_scalar_value(&event), "abcdefgh");
+    ck_assert_uint_eq(yaml_scalar_length(&event), 8);
+    ck_assert_str_eq(yaml_scalar_tag(&event), "!test");
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ys_plain)
+{
+    const unsigned char INPUT[] = "!test abcdefgh";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert_str_eq(yaml_scalar_value(&event), "abcdefgh");
+    ck_assert_uint_eq(yaml_scalar_length(&event), 8);
+    ck_assert(yaml_scalar_is_plain(&event));
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ys_single_quoted)
+{
+    const unsigned char INPUT[] = "'abcdefgh'";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert_str_eq(yaml_scalar_value(&event), "abcdefgh");
+    ck_assert_uint_eq(yaml_scalar_length(&event), 8);
+    ck_assert_int_eq(yaml_scalar_style(&event),
+                     YAML_SINGLE_QUOTED_SCALAR_STYLE);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ys_double_quoted)
+{
+    const unsigned char INPUT[] = "\"abcdefgh\"";
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert_str_eq(yaml_scalar_value(&event), "abcdefgh");
+    ck_assert_uint_eq(yaml_scalar_length(&event), 8);
+    ck_assert_int_eq(yaml_scalar_style(&event),
+                     YAML_DOUBLE_QUOTED_SCALAR_STYLE);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -101,6 +237,16 @@ unit_suite(void)
     tcase_add_checked_fixture(tests, parser_init, parser_exit);
     tcase_add_test(tests, ymt_basic);
     tcase_add_test(tests, ymt_no_tag);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_scalar_*");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_test(tests, ys_no_tag);
+    tcase_add_test(tests, ys_tagged);
+    tcase_add_test(tests, ys_plain);
+    tcase_add_test(tests, ys_single_quoted);
+    tcase_add_test(tests, ys_double_quoted);
 
     suite_add_tcase(suite, tests);
 
