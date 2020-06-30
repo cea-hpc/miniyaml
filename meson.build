@@ -1,4 +1,4 @@
-# This file is part of the miniyaml library
+# This file is part of MiniYAML
 # Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
 # 		      alternatives
 #
@@ -16,7 +16,7 @@ project(
 
 # Dependencies
 
-libyaml = dependency('yaml-0.1', version: '>=0.2.4')
+libyaml = dependency('yaml-0.1', version: '>=0.1.7')
 
 # Recurse in subdirectories
 

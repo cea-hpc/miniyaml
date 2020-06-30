@@ -1,4 +1,4 @@
-/* This file is part of the miniyaml Library
+/* This file is part of MiniYAML
  * Copyright (C) 2019 Commissariat a l'energie atomique et aux energies
  *                    alternatives
  *
