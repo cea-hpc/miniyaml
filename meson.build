@@ -18,7 +18,7 @@ project(
 
 # Dependencies
 
-libyaml = dependency('yaml-0.1', version: '>=0.2.4')
+libyaml = dependency('yaml-0.1', version: '>=0.1.7')
 
 # Recurse in subdirectories
 
