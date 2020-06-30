@@ -367,6 +367,97 @@ START_TEST(yebo_false)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            yaml_emit_integer()                             |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(yei_zero)
+{
+    const char EXPECTED_OUTPUT[] = "--- 0\n"
+                                   "...\n";
+    unsigned char output[sizeof(EXPECTED_OUTPUT)] = {};
+    size_t written = 0;
+
+    yaml_emitter_set_output_string(&emitter, output, sizeof(output), &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_integer(&emitter, 0));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, sizeof(output) - 1);
+    ck_assert_str_eq((char *)output, EXPECTED_OUTPUT);
+}
+END_TEST
+
+START_TEST(yei_min)
+{
+    char *expected_output;
+    unsigned char *output;
+    size_t written = 0;
+    int size;
+
+    size = asprintf(&expected_output, "--- %" PRIiMAX "\n...\n", INTMAX_MIN);
+    ck_assert_int_gt(size, 0);
+
+    output = calloc(1, size + 1);
+    ck_assert_ptr_nonnull(output);
+
+    yaml_emitter_set_output_string(&emitter, output, size + 1, &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_integer(&emitter, INTMAX_MIN));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, size);
+    ck_assert_str_eq((char *)output, expected_output);
+
+    free(output);
+    free(expected_output);
+}
+END_TEST
+
+START_TEST(yei_max)
+{
+    char *expected_output;
+    unsigned char *output;
+    size_t written = 0;
+    int size;
+
+    size = asprintf(&expected_output, "--- %" PRIiMAX "\n...\n", INTMAX_MAX);
+    ck_assert_int_gt(size, 0);
+
+    output = calloc(1, size + 1);
+    ck_assert_ptr_nonnull(output);
+
+    yaml_emitter_set_output_string(&emitter, output, size + 1, &written);
+
+    ck_assert(yaml_emit_stream_start(&emitter, YAML_UTF8_ENCODING));
+    ck_assert(yaml_emit_document_start(&emitter));
+
+    ck_assert(yaml_emit_integer(&emitter, INTMAX_MAX));
+
+    ck_assert(yaml_emit_document_end(&emitter));
+    ck_assert(yaml_emit_stream_end(&emitter));
+    ck_assert(yaml_emitter_flush(&emitter));
+
+    ck_assert_uint_eq(written, size);
+    ck_assert_str_eq((char *)output, expected_output);
+
+    free(output);
+    free(expected_output);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -420,6 +511,14 @@ unit_suite(void)
     tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
     tcase_add_test(tests, yebo_true);
     tcase_add_test(tests, yebo_false);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_emit_integer");
+    tcase_add_checked_fixture(tests, emitter_init, emitter_exit);
+    tcase_add_test(tests, yei_zero);
+    tcase_add_test(tests, yei_min);
+    tcase_add_test(tests, yei_max);
 
     suite_add_tcase(suite, tests);
 
