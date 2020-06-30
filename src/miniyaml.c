@@ -315,15 +315,15 @@ yaml_parse_boolean(const yaml_event_t *event, bool *b)
         break;
     case 'o': /* on, off */
         switch (*value++) {
-        case 'n': /* on */
-            if (*value != '\0')
-                break;
-            *b = true;
-            return true;
         case 'f': /* off */
             if (strcmp(value, "f"))
                 break;
             *b = false;
+            return true;
+        case 'n': /* on */
+            if (*value != '\0')
+                break;
+            *b = true;
             return true;
         }
         break;
