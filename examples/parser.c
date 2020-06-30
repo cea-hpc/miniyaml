@@ -1,3 +1,10 @@
+/* this file is part of MiniYAML
+ * copyright (c) 2019 commissariat a l'energie atomique et aux energies
+ *                    alternatives
+ *
+ * spdx-license-identifer: lgpl-3.0-or-later
+ */
+
 #include <errno.h>
 #include <error.h>
 #include <limits.h>
