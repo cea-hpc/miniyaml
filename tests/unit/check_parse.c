@@ -307,6 +307,158 @@ START_TEST(ypn_invalid)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            yaml_parse_boolean()                            |
+ *----------------------------------------------------------------------------*/
+
+static const char *TRUES[] = {
+    "y",
+    "Y",
+    "yes",
+    "Yes",
+    "YES",
+    "true",
+    "True",
+    "TRUE",
+    "on",
+    "On",
+    "ON",
+    "!!bool 'y'",
+};
+
+START_TEST(ypb_true)
+{
+    const char *INPUT = TRUES[_i];
+    yaml_event_t event;
+    bool b;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_boolean(&event, &b));
+    ck_assert(b);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+static const char *FALSES[] = {
+    "n",
+    "N",
+    "no",
+    "No",
+    "NO",
+    "false",
+    "False",
+    "FALSE",
+    "off",
+    "Off",
+    "OFF",
+    "!!bool \"n\"",
+};
+
+START_TEST(ypb_false)
+{
+    const char *INPUT = FALSES[_i];
+    yaml_event_t event;
+    bool b;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_boolean(&event, &b));
+    ck_assert(!b);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+static const char *INVALID_BOOLEANS[] = {
+    /* Not plain */
+    "\"y\"",
+    "'n'",
+    /* Typos */
+    "0",
+    "FALS",
+    "Fals",
+    "Folse",
+    "fals",
+    "NOO",
+    "Noo",
+    "Ni",
+    "noo",
+    "ni",
+    "OF",
+    "Of",
+    "ONN",
+    "Onn",
+    "Oy",
+    "of",
+    "onn",
+    "oy",
+    "TRU",
+    "Tru",
+    "Ttrue",
+    "ttrue",
+    "YE",
+    "Ye",
+    "Yas",
+    "ye",
+    "yas",
+    /* Bad tag */
+    "!!boolean y",
+};
+
+START_TEST(ypb_invalid)
+{
+    const char *INPUT = INVALID_BOOLEANS[_i];
+    yaml_event_t event;
+    bool b;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_boolean(&event, &b));
+    ck_assert_int_eq(errno, EINVAL);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -336,6 +488,14 @@ unit_suite(void)
     tcase_add_checked_fixture(tests, parser_init, parser_exit);
     tcase_add_loop_test(tests, ypn_valid, 0, ARRAY_SIZE(VALID_NULLS));
     tcase_add_loop_test(tests, ypn_invalid, 0, ARRAY_SIZE(INVALID_NULLS));
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parse_boolean");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_loop_test(tests, ypb_true, 0, ARRAY_SIZE(TRUES));
+    tcase_add_loop_test(tests, ypb_false, 0, ARRAY_SIZE(FALSES));
+    tcase_add_loop_test(tests, ypb_invalid, 0, ARRAY_SIZE(INVALID_BOOLEANS));
 
     suite_add_tcase(suite, tests);
 
