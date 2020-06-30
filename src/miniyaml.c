@@ -198,8 +198,10 @@ yaml_parse_null(const yaml_event_t *event)
 
     assert(event->type == YAML_SCALAR_EVENT);
 
-    if (tag && yaml_tag2type(tag) == YT_NULL)
-        return true;
+    if (tag) {
+        errno = EINVAL;
+        return yaml_tag2type(tag) == YT_NULL;
+    }
     if (!yaml_scalar_is_plain(event))
         goto out_einval;
 
@@ -207,7 +209,9 @@ yaml_parse_null(const yaml_event_t *event)
     case '\0': /* (empty) */
         return true;
     case '~': /* ~ */
-        return *value == '\0';
+        if (*value != '\0')
+            break;
+        return true;
     case 'n': /* null */
         if (strcmp(value, "ull"))
             break;
@@ -215,9 +219,13 @@ yaml_parse_null(const yaml_event_t *event)
     case 'N': /* Null, NULL */
         switch (*value++) {
         case 'u': /* Null */
-            return strcmp(value, "ll") == 0;
+            if (strcmp(value, "ll"))
+                break;
+            return true;
         case 'U': /* NULL */
-            return strcmp(value, "LL") == 0;
+            if (strcmp(value, "LL"))
+                break;
+            return true;
         }
         break;
     }
