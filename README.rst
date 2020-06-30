@@ -21,7 +21,7 @@ Installation
 ============
 
 Install libyaml_ (either from source of using your favorite package manager).
-MiniYAML was developped using ``libyaml >= 2.4``; feel free to test it with an
+MiniYAML was developped using ``libyaml >= 0.1.7``; feel free to test it with an
 older version.
 
 Download MiniYAML's sources:
