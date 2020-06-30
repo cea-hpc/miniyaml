@@ -225,6 +225,88 @@ START_TEST(ys_double_quoted)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                             yaml_parse_null()                              |
+ *----------------------------------------------------------------------------*/
+
+static const char *VALID_NULLS[] = {
+    "---",
+    "~",
+    "null",
+    "Null",
+    "NULL",
+    "!!null",
+    "!!null \"whatever\"",
+};
+
+START_TEST(ypn_valid)
+{
+    const char *INPUT = VALID_NULLS[_i];
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_null(&event));
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+static const char *INVALID_NULLS[] = {
+    /* Not plain */
+    "\"\"",
+    "\"~\"",
+    "'null'",
+    /* Typos */
+    "0",
+    "~~",
+    "nill",
+    "Nill",
+    "Nul",
+    "NUL",
+    /* Bad tag */
+    "!!nul",
+};
+
+START_TEST(ypn_invalid)
+{
+    const char *INPUT = INVALID_NULLS[_i];
+    yaml_event_t event;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_null(&event));
+    ck_assert_int_eq(errno, EINVAL);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -247,6 +329,13 @@ unit_suite(void)
     tcase_add_test(tests, ys_plain);
     tcase_add_test(tests, ys_single_quoted);
     tcase_add_test(tests, ys_double_quoted);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parse_null");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_loop_test(tests, ypn_valid, 0, ARRAY_SIZE(VALID_NULLS));
+    tcase_add_loop_test(tests, ypn_invalid, 0, ARRAY_SIZE(INVALID_NULLS));
 
     suite_add_tcase(suite, tests);
 
