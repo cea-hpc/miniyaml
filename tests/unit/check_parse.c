@@ -327,7 +327,7 @@ static const char *TRUES[] = {
     "!!bool 'y'",
 };
 
-START_TEST(ypb_true)
+START_TEST(ypbo_true)
 {
     const char *INPUT = TRUES[_i];
     yaml_event_t event;
@@ -369,7 +369,7 @@ static const char *FALSES[] = {
     "!!bool \"n\"",
 };
 
-START_TEST(ypb_false)
+START_TEST(ypbo_false)
 {
     const char *INPUT = FALSES[_i];
     yaml_event_t event;
@@ -433,7 +433,7 @@ static const char *INVALID_BOOLEANS[] = {
     "!!null",
 };
 
-START_TEST(ypb_invalid)
+START_TEST(ypbo_invalid)
 {
     const char *INPUT = INVALID_BOOLEANS[_i];
     yaml_event_t event;
@@ -1659,6 +1659,111 @@ START_TEST(yps_invalid_string)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            yaml_parse_binary()                             |
+ *----------------------------------------------------------------------------*/
+
+static const char *BINARY_ABCDEFGS[] = {
+    "YWJjZGVmZw==",
+    "!!binary YWJjZGVmZw==",
+    "!!binary 'YWJjZGVmZw=='",
+    "!!binary \"YWJjZGVmZw==\"",
+};
+
+START_TEST(ypbi_abcdefg)
+{
+    const char *INPUT = BINARY_ABCDEFGS[_i];
+    char binary[sizeof(ABCDEFGS[0]) - 1];
+    yaml_event_t event;
+    size_t size;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_binary(&event, binary, &size));
+    ck_assert_uint_eq(size, sizeof(binary));
+    ck_assert_mem_eq(binary, ABCDEFGS[0], sizeof(binary));
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+static const char *INVALID_BINARIES[] = {
+    /* Not plain */
+    "'AAAA'",
+    /* Bad tag */
+    "!!bin AAAA",
+    "!!str AAAA",
+};
+
+START_TEST(ypbi_invalid)
+{
+    const char *INPUT = INVALID_BINARIES[_i];
+    yaml_event_t event;
+    char binary[256];
+    size_t size;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_binary(&event, binary, &size));
+    ck_assert_int_eq(errno, EINVAL);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypbi_decoding_error)
+{
+    const unsigned char INPUT[] = "0";
+    yaml_event_t event;
+    char binary[256];
+    size_t size;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_binary(&event, binary, &size));
+    ck_assert_int_eq(errno, EILSEQ);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -1693,9 +1798,9 @@ unit_suite(void)
 
     tests = tcase_create("yaml_parse_boolean");
     tcase_add_checked_fixture(tests, parser_init, parser_exit);
-    tcase_add_loop_test(tests, ypb_true, 0, ARRAY_SIZE(TRUES));
-    tcase_add_loop_test(tests, ypb_false, 0, ARRAY_SIZE(FALSES));
-    tcase_add_loop_test(tests, ypb_invalid, 0, ARRAY_SIZE(INVALID_BOOLEANS));
+    tcase_add_loop_test(tests, ypbo_true, 0, ARRAY_SIZE(TRUES));
+    tcase_add_loop_test(tests, ypbo_false, 0, ARRAY_SIZE(FALSES));
+    tcase_add_loop_test(tests, ypbo_invalid, 0, ARRAY_SIZE(INVALID_BOOLEANS));
 
     suite_add_tcase(suite, tests);
 
@@ -1751,6 +1856,14 @@ unit_suite(void)
     tcase_add_test(tests, yps_no_size);
     tcase_add_loop_test(tests, yps_invalid_string, 0,
                         ARRAY_SIZE(INVALID_STRINGS));
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parse_binary");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_loop_test(tests, ypbi_abcdefg, 0, ARRAY_SIZE(BINARY_ABCDEFGS));
+    tcase_add_loop_test(tests, ypbi_invalid, 0, ARRAY_SIZE(INVALID_BINARIES));
+    tcase_add_test(tests, ypbi_decoding_error);
 
     suite_add_tcase(suite, tests);
 
