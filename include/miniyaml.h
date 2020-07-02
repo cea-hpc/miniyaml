@@ -470,6 +470,12 @@ yaml_emit_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
  *
  * @error EINVAL    \p event is not parsable as an unsigned integer
  * @error ERANGE    the value \p event represents does not fit in an uintmaxt_t
+ *
+ * Note that negative integers will implicitely be converted to their signed
+ * equivalent, just like if you cast a negative intmax_t into an uintmax_t
+ * (eg. -UINTMAX_MAX --> 1).
+ * Integers strictly smaller than -UINTMAX_MAX will fail to be parsed and errno
+ * will be set to ERANGE.
  */
 bool
 yaml_parse_unsigned_integer(const yaml_event_t *event, uintmax_t *u);
