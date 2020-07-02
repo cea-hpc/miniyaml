@@ -998,6 +998,524 @@ START_TEST(ypi_too_big_base16)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                       yaml_parse_unsigned_integer()                        |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(ypui_zero)
+{
+    const char *INPUT = ZEROS[_i];
+    yaml_event_t event;
+    uintmax_t u;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, 0);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypui_sixteen)
+{
+    const char *INPUT = SIXTEENS[_i];
+    yaml_event_t event;
+    uintmax_t u;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, 16);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypui_minus_sixteen)
+{
+    const char *INPUT = MINUS_SIXTEENS[_i];
+    yaml_event_t event;
+    uintmax_t u;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, -16);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypui_min_base10)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-%"PRIuMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, 1);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_min_base8)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-0%"PRIoMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, 1);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_min_base16)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-0x%"PRIxMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, 1);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_max_base10)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "%"PRIuMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, UINTMAX_MAX);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_max_base8)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "0%"PRIoMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, UINTMAX_MAX);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_max_base16)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "0x%"PRIxMAX, UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_uint_eq(u, UINTMAX_MAX);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+static const char *INVALID_UNSIGNED_INTEGERS[] = {
+    /* No tag, not plain */
+    "'0'",
+    "\"0\"",
+    /* Bad tag */
+    "!!unsigned 0",
+    "!!uint 1",
+    /* Empty */
+    "!!int",
+    /* Bad base 10 */
+    "a",
+    /* Bad base 8 */
+    "09",
+    /* Bad base 16 */
+    "0x",
+    "f",
+    "0xg",
+    /* Not a number */
+    "~",
+    "test",
+    /* Not only a number */
+    "0test",
+    "0 test",
+    /* Not only one number */
+    "0 1 2 3",
+};
+
+START_TEST(ypui_invalid)
+{
+    const char *INPUT = INVALID_UNSIGNED_INTEGERS[_i];
+    yaml_event_t event;
+    uintmax_t u;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, EINVAL);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(ypui_too_little_base10)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-%"PRIuMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_too_little_base8)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-0%"PRIoMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_too_little_base16)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "-0x%"PRIxMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_too_big_base10)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "%"PRIuMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_too_big_base8)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "0%"PRIoMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
+START_TEST(ypui_too_big_base16)
+{
+    yaml_event_t event;
+    char *input;
+    uintmax_t u;
+    int size;
+
+    size = asprintf(&input, "0x%"PRIxMAX"0", UINTMAX_MAX);
+    ck_assert_int_ge(size, 0);
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)input, size);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_unsigned_integer(&event, &u));
+    ck_assert_int_eq(errno, ERANGE);
+
+    yaml_event_delete(&event);
+    free(input);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -1057,6 +1575,29 @@ unit_suite(void)
     tcase_add_test(tests, ypi_too_big_base10);
     tcase_add_test(tests, ypi_too_big_base8);
     tcase_add_test(tests, ypi_too_big_base16);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parse_unsigned_integer");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_loop_test(tests, ypui_zero, 0, ARRAY_SIZE(ZEROS));
+    tcase_add_loop_test(tests, ypui_sixteen, 0, ARRAY_SIZE(SIXTEENS));
+    tcase_add_loop_test(tests, ypui_minus_sixteen, 0,
+                        ARRAY_SIZE(MINUS_SIXTEENS));
+    tcase_add_test(tests, ypui_min_base10);
+    tcase_add_test(tests, ypui_min_base8);
+    tcase_add_test(tests, ypui_min_base16);
+    tcase_add_test(tests, ypui_max_base10);
+    tcase_add_test(tests, ypui_max_base8);
+    tcase_add_test(tests, ypui_max_base16);
+    tcase_add_loop_test(tests, ypui_invalid, 0,
+                        ARRAY_SIZE(INVALID_UNSIGNED_INTEGERS));
+    tcase_add_test(tests, ypui_too_little_base10);
+    tcase_add_test(tests, ypui_too_little_base8);
+    tcase_add_test(tests, ypui_too_little_base16);
+    tcase_add_test(tests, ypui_too_big_base10);
+    tcase_add_test(tests, ypui_too_big_base8);
+    tcase_add_test(tests, ypui_too_big_base16);
 
     suite_add_tcase(suite, tests);
 
