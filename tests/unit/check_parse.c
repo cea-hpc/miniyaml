@@ -1520,6 +1520,145 @@ START_TEST(ypui_too_big_base16)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                            yaml_parse_string()                             |
+ *----------------------------------------------------------------------------*/
+
+static const char *ABCDEFGS[] = {
+    "abcdefg",
+    "'abcdefg'",
+    "\"abcdefg\"",
+    "!!str abcdefg",
+    "!!str 'abcdefg'",
+    "!!str \"abcdefg\"",
+};
+
+START_TEST(yps_abcdefg)
+{
+    const char *INPUT = ABCDEFGS[_i];
+    yaml_event_t event;
+    const char *string;
+    size_t size;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_string(&event, &string, &size));
+    ck_assert_uint_eq(size, strlen(ABCDEFGS[0]));
+    ck_assert_str_eq(string, ABCDEFGS[0]);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+/* Any plain scalar can be a string */
+static const char *VALID_STRINGS[] = {
+    "~", /* Null */
+    "y", /* Boolean */
+    "0", /* Integer */
+};
+
+START_TEST(yps_valid_string)
+{
+    const char *INPUT = VALID_STRINGS[_i];
+    yaml_event_t event;
+    const char *string;
+    size_t size;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_string(&event, &string, &size));
+    ck_assert_uint_eq(size, strlen(INPUT));
+    ck_assert_str_eq(string, INPUT);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+START_TEST(yps_no_size)
+{
+    const unsigned char INPUT[] = "test";
+    yaml_event_t event;
+    const char *string;
+
+    yaml_parser_set_input_string(&parser, INPUT, sizeof(INPUT) - 1);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    ck_assert(yaml_parse_string(&event, &string, NULL));
+    ck_assert_str_eq(string, (char *)INPUT);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
+static const char *INVALID_STRINGS[] = {
+    /* Bad tag */
+    "!!string test",
+    "!!s test",
+    "!!int test",
+};
+
+START_TEST(yps_invalid_string)
+{
+    const char *INPUT = INVALID_STRINGS[_i];
+    yaml_event_t event;
+    const char *string;
+
+    yaml_parser_set_input_string(&parser, (const unsigned char *)INPUT,
+                                 strlen(INPUT));
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_STREAM_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_DOCUMENT_START_EVENT);
+    yaml_event_delete(&event);
+
+    ck_assert(yaml_parser_parse(&parser, &event));
+    ck_assert_int_eq(event.type, YAML_SCALAR_EVENT);
+
+    errno = 0;
+    ck_assert(!yaml_parse_string(&event, &string, NULL));
+    ck_assert_int_eq(errno, EINVAL);
+
+    yaml_event_delete(&event);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -1602,6 +1741,16 @@ unit_suite(void)
     tcase_add_test(tests, ypui_too_big_base10);
     tcase_add_test(tests, ypui_too_big_base8);
     tcase_add_test(tests, ypui_too_big_base16);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("yaml_parse_string");
+    tcase_add_checked_fixture(tests, parser_init, parser_exit);
+    tcase_add_loop_test(tests, yps_abcdefg, 0, ARRAY_SIZE(ABCDEFGS));
+    tcase_add_loop_test(tests, yps_valid_string, 0, ARRAY_SIZE(VALID_STRINGS));
+    tcase_add_test(tests, yps_no_size);
+    tcase_add_loop_test(tests, yps_invalid_string, 0,
+                        ARRAY_SIZE(INVALID_STRINGS));
 
     suite_add_tcase(suite, tests);
 
