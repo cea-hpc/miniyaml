@@ -430,7 +430,7 @@ yaml_parse_unsigned_integer(const yaml_event_t *event, uintmax_t *u)
     *u = strtoumax(value, &end, 0);
     if ((*u == UINTMAX_MAX) && errno == ERANGE)
         return false;
-    if (*end != '\0') {
+    if (*end != '\0' || value == end) {
         errno = EINVAL;
         return false;
     }
