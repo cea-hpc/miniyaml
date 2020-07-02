@@ -510,8 +510,8 @@ yaml_parse_binary(const yaml_event_t *event, char *buffer, size_t *size)
         return false;
     }
 
-     rc = base64_decode(buffer, value, length);
-     if (rc != -1)
-         *size = rc;
-     return rc != -1;
+    rc = base64_decode(buffer, value, length);
+    if (rc != -1)
+        *size = rc;
+    return rc != -1;
 }
