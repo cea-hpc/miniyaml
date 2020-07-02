@@ -401,7 +401,7 @@ yaml_parse_integer(const yaml_event_t *event, intmax_t *i)
     *i = strtoimax(value, &end, 0);
     if ((*i == INTMAX_MIN || *i == INTMAX_MAX) && errno == ERANGE)
         return false;
-    if (*end != '\0') {
+    if (*end != '\0' || value == end) {
         errno = EINVAL;
         return false;
     }
