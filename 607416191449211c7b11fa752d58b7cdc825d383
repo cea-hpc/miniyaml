@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0058cbbe_a43cdf2c",
+        "filename": "tests/unit/check_skip.c",
+        "patchSetId": 5
+      },
+      "lineNbr": 330,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-07T11:30:35Z",
+      "side": 1,
+      "message": "(typo) sequence",
+      "range": {
+        "startLine": 330,
+        "startChar": 70,
+        "endLine": 330,
+        "endChar": 77
+      },
+      "revId": "607416191449211c7b11fa752d58b7cdc825d383",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
