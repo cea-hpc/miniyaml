@@ -9,6 +9,7 @@
 # include "config.h"
 #endif
 
+#include <errno.h>
 #include <limits.h>
 #include <stdlib.h>
 
@@ -168,6 +169,209 @@ START_TEST(be_every_char)
 }
 END_TEST
 
+/*----------------------------------------------------------------------------*
+ |                              base64_decode()                               |
+ *----------------------------------------------------------------------------*/
+
+START_TEST(bd_nothing)
+{
+    char input;
+
+    ck_assert_int_eq(base64_decode(NULL, &input, 0), 0);
+}
+END_TEST
+
+START_TEST(bd_leading_spaces)
+{
+    char input[] = {' ', '\f', '\n', '\r', '\t', '\v'};
+
+    ck_assert_int_eq(base64_decode(NULL, input, sizeof(input)), 0);
+}
+END_TEST
+
+START_TEST(bd_c0)
+{
+    char input[4] = {0, 0, '=', '='};
+    char decoded;
+
+    for (size_t i = 0; i < 64; i++) {
+        input[0] = BASE64[i];
+        for (size_t j = 0; j < 4; j++) {
+            input[1] = BASE64[j << 4];
+
+            for (size_t k = 2; k <= sizeof(input); k++) {
+                ck_assert_int_eq(base64_decode(&decoded, input, k), 1);
+                ck_assert_int_eq(decoded, CHARS[i * 4 + j]);
+            }
+        }
+    }
+}
+END_TEST
+
+START_TEST(bd_spaces_in_c0)
+{
+    char input[] = {'A', ' ', '\f', '\n', '\r', '\t', '\v', 'A'};
+    char decoded = CHAR_MAX;
+
+    ck_assert_int_eq(base64_decode(&decoded, input, sizeof(input)), 1);
+    ck_assert_int_eq(decoded, 0);
+}
+END_TEST
+
+START_TEST(bd_spaces_in_c1)
+{
+    char input[] = {'A', 'A', ' ', '\f', '\n', '\r', '\t', '\v', 'A'};
+    char decoded[2] = {CHAR_MAX, CHAR_MAX};
+
+    ck_assert_int_eq(base64_decode(decoded, input, sizeof(input)), 2);
+    ck_assert_int_eq(decoded[0], 0);
+    ck_assert_int_eq(decoded[1], 0);
+}
+END_TEST
+
+START_TEST(bd_c1)
+{
+    char input[4] = {BASE64[0], 0, 0, '='};
+    char decoded[2];
+
+    for (size_t i = 0; i < 16; i++) {
+        input[1] = BASE64[i];
+        for (size_t j = 0; j < 16; j++) {
+            input[2] = BASE64[j << 2];
+
+            for (size_t k = 3; k <= sizeof(input); k++) {
+                ck_assert_int_eq(base64_decode(decoded, input, k), 2);
+                ck_assert_int_eq(decoded[0], 0);
+                ck_assert_int_eq(decoded[1], CHARS[i * 16 + j]);
+            }
+        }
+    }
+}
+END_TEST
+
+START_TEST(bd_spaces_in_c2)
+{
+    char input[] = {'A', 'A', 'A', ' ', '\f', '\n', '\r', '\t', '\v', 'A'};
+    char decoded[3] = {CHAR_MAX, CHAR_MAX, CHAR_MAX};
+
+    ck_assert_int_eq(base64_decode(decoded, input, sizeof(input)), 3);
+    ck_assert_int_eq(decoded[0], 0);
+    ck_assert_int_eq(decoded[1], 0);
+    ck_assert_int_eq(decoded[2], 0);
+}
+END_TEST
+
+START_TEST(bd_c2)
+{
+    char input[4] = {BASE64[0], BASE64[0], 0, 0};
+    char decoded[3];
+
+    for (size_t i = 0; i < 4; i++) {
+        input[2] = BASE64[i];
+        for (size_t j = 0; j < 64; j++) {
+            input[3] = BASE64[j];
+
+            ck_assert_int_eq(base64_decode(decoded, input, 4), 3);
+            ck_assert_int_eq(decoded[0], 0);
+            ck_assert_int_eq(decoded[1], 0);
+            ck_assert_int_eq(decoded[2], CHARS[i * 64 + j]);
+        }
+    }
+}
+END_TEST
+
+START_TEST(bd_trailing_spaces)
+{
+    char input[] = {'A', 'A', '=', '=', ' ', '\f', '\n', '\r', '\t', '\v'};
+    char decoded;
+
+    ck_assert_int_eq(base64_decode(&decoded, input, sizeof(input)), 1);
+    ck_assert_int_eq(decoded, 0);
+}
+END_TEST
+
+START_TEST(bd_every_char)
+{
+    const char INPUT[] =
+        "AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8gISIjJCUmJygpKissLS4v"
+        "MDEyMzQ1Njc4OTo7PD0+P0BBQkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWltcXV5f"
+        "YGFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6e3x9fn+AgYKDhIWGh4iJiouMjY6P"
+        "kJGSk5SVlpeYmZqbnJ2en6ChoqOkpaanqKmqq6ytrq+wsbKztLW2t7i5uru8vb6/"
+        "wMHCw8TFxsfIycrLzM3Oz9DR0tPU1dbX2Nna29zd3t/g4eLj5OXm5+jp6uvs7e7v"
+        "8PHy8/T19vf4+fr7/P3+/w==";
+    char decoded[sizeof(CHARS)];
+
+    ck_assert_int_eq(base64_decode(decoded, INPUT, sizeof(INPUT) - 1),
+                     sizeof(decoded));
+    ck_assert_mem_eq(decoded, CHARS, sizeof(CHARS));
+}
+END_TEST
+
+START_TEST(bd_c0_encoding_error)
+{
+    char input = '.';
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(NULL, &input, 1), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(bd_too_short)
+{
+    char input = 'A';
+    char decoded;
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(&decoded, &input, 1), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(bd_c0_encoding_error_bis)
+{
+    char input[2] = "A=";
+    char decoded;
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(&decoded, input, 2), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(bd_c1_encoding_error)
+{
+    char input[3] = "AA.";
+    char decoded[2];
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(decoded, input, 3), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(bd_c2_encoding_error)
+{
+    char input[4] = "AAA.";
+    char decoded[3];
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(decoded, input, 4), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
+START_TEST(bd_trailing_encoding_error)
+{
+    char input[] = {'A', 'A', '=', '=', '.'};
+    char decoded;
+
+    errno = 0;
+    ck_assert_int_eq(base64_decode(&decoded, input, sizeof(input)), -1);
+    ck_assert_int_eq(errno, EILSEQ);
+}
+END_TEST
+
 static Suite *
 unit_suite(void)
 {
@@ -183,6 +387,26 @@ unit_suite(void)
     tcase_add_test(tests, be_c2);
     tcase_add_test(tests, be_c3);
     tcase_add_test(tests, be_every_char);
+
+    suite_add_tcase(suite, tests);
+
+    tests = tcase_create("base64_decode");
+    tcase_add_test(tests, bd_nothing);
+    tcase_add_test(tests, bd_leading_spaces);
+    tcase_add_test(tests, bd_c0);
+    tcase_add_test(tests, bd_spaces_in_c0);
+    tcase_add_test(tests, bd_spaces_in_c1);
+    tcase_add_test(tests, bd_c1);
+    tcase_add_test(tests, bd_spaces_in_c2);
+    tcase_add_test(tests, bd_c2);
+    tcase_add_test(tests, bd_trailing_spaces);
+    tcase_add_test(tests, bd_every_char);
+    tcase_add_test(tests, bd_c0_encoding_error);
+    tcase_add_test(tests, bd_too_short);
+    tcase_add_test(tests, bd_c0_encoding_error_bis);
+    tcase_add_test(tests, bd_c1_encoding_error);
+    tcase_add_test(tests, bd_c2_encoding_error);
+    tcase_add_test(tests, bd_trailing_encoding_error);
 
     suite_add_tcase(suite, tests);
 
