@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e775fa59_af0150c4",
+        "filename": "tests/unit/check_skip.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 238,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-07T11:29:38Z",
+      "side": 1,
+      "message": "Yes, I assume the previous test shows that I consume a YAML_MAPPING_END_EVENT.\nThis one is more about not consuming all of them.\n\n... It doesn\u0027t cost me much to add what you suggest though.\n\nDone",
+      "parentUuid": "12d09a98_0dbabd51",
+      "range": {
+        "startLine": 236,
+        "startChar": 4,
+        "endLine": 238,
+        "endChar": 30
+      },
+      "revId": "812c19d629f8a3dc28b61a61d10f8486cb91414a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "65c8cdc8_34221831",
         "filename": "tests/unit/check_skip.c",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "812c19d629f8a3dc28b61a61d10f8486cb91414a",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81415a43_e5ed4c6c",
+        "filename": "tests/unit/check_skip.c",
+        "patchSetId": 4
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-07T11:29:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "65c8cdc8_34221831",
+      "range": {
+        "startLine": 321,
+        "startChar": 4,
+        "endLine": 323,
+        "endChar": 30
+      },
+      "revId": "812c19d629f8a3dc28b61a61d10f8486cb91414a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
