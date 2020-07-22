@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "b68afb5d_c9ad4d69",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-07-22T13:54:08Z",
+      "side": 1,
+      "message": "minor: this documentation addition is not linked to this patch (can be add in tests for yaml_parse_unsigned_integer())",
+      "range": {
+        "startLine": 474,
+        "startChar": 1,
+        "endLine": 478,
+        "endChar": 25
+      },
+      "revId": "4bc90c8499ef784adcd3781dcc03cde7b1234925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
