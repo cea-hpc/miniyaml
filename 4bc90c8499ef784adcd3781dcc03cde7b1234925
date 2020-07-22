@@ -22,6 +22,30 @@
       "revId": "4bc90c8499ef784adcd3781dcc03cde7b1234925",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "35ab3ae5_53223dae",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 9
+      },
+      "lineNbr": 478,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-22T14:02:06Z",
+      "side": 1,
+      "message": "Yes, good catch, thanks!\n\nDone",
+      "parentUuid": "b68afb5d_c9ad4d69",
+      "range": {
+        "startLine": 474,
+        "startChar": 1,
+        "endLine": 478,
+        "endChar": 25
+      },
+      "revId": "4bc90c8499ef784adcd3781dcc03cde7b1234925",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
