@@ -70,6 +70,30 @@
       "revId": "51c56baa592fa33c47938c49edcab55d86b43ef3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4362ed80_53dcd32d",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-28T21:33:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c8aa0ea_b2aa6d4a",
+      "range": {
+        "startLine": 769,
+        "startChar": 4,
+        "endLine": 769,
+        "endChar": 8
+      },
+      "revId": "51c56baa592fa33c47938c49edcab55d86b43ef3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": false
     }
   ]
 }
