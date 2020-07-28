@@ -22,6 +22,30 @@
       "revId": "51c56baa592fa33c47938c49edcab55d86b43ef3",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e0b720f3_bfd4872c",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 10
+      },
+      "lineNbr": 769,
+      "author": {
+        "id": 1010215
+      },
+      "writtenOn": "2020-07-28T14:29:13Z",
+      "side": 1,
+      "message": "There is an equivalent test in \"Bad base 10\": \"a\".\n\nI think I kept them both precisely because it is ambiguous whether this case is about \"not a base10 number\" or \"a base16 number without the \u00270x\u0027 prefix\". I chose a different letter because I don\u0027t want this to be a complete waste of space and time.",
+      "parentUuid": "9cc24bc0_092e1e12",
+      "range": {
+        "startLine": 769,
+        "startChar": 4,
+        "endLine": 769,
+        "endChar": 8
+      },
+      "revId": "51c56baa592fa33c47938c49edcab55d86b43ef3",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
     }
   ]
 }
