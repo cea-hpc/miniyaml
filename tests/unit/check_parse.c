@@ -278,6 +278,7 @@ static const char *INVALID_NULLS[] = {
     "NUL",
     /* Bad tag */
     "!!nul",
+    "!!binary MDEy",
 };
 
 START_TEST(ypn_invalid)
@@ -429,6 +430,7 @@ static const char *INVALID_BOOLEANS[] = {
     "yas",
     /* Bad tag */
     "!!boolean y",
+    "!!null",
 };
 
 START_TEST(ypb_invalid)
@@ -758,6 +760,7 @@ static const char *INVALID_INTEGERS[] = {
     /* Bad tag */
     "!!integer 0",
     "!!i 1",
+    "!!bool 0",
     /* Empty */
     "!!int",
     /* Bad base 10 */
@@ -1276,6 +1279,7 @@ static const char *INVALID_UNSIGNED_INTEGERS[] = {
     /* Bad tag */
     "!!unsigned 0",
     "!!uint 1",
+    "!!bool 0",
     /* Empty */
     "!!int",
     /* Bad base 10 */
