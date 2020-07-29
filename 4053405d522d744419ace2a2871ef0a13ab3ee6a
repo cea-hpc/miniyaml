@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0dcd9743_de195466",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-07-29T12:05:24Z",
+      "side": 1,
+      "message": "minor: this addition (and the followings) are not related to this patch",
+      "range": {
+        "startLine": 281,
+        "startChar": 4,
+        "endLine": 281,
+        "endChar": 20
+      },
+      "revId": "4053405d522d744419ace2a2871ef0a13ab3ee6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "200a47c7_6319f04e",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 433,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-07-29T12:05:24Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 433,
+        "startChar": 4,
+        "endLine": 433,
+        "endChar": 13
+      },
+      "revId": "4053405d522d744419ace2a2871ef0a13ab3ee6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "633daa6f_75d61a1e",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 763,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-07-29T12:05:24Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 763,
+        "startChar": 4,
+        "endLine": 763,
+        "endChar": 15
+      },
+      "revId": "4053405d522d744419ace2a2871ef0a13ab3ee6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0fd4e1bb_8d814cdb",
+        "filename": "tests/unit/check_parse.c",
+        "patchSetId": 11
+      },
+      "lineNbr": 1282,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2020-07-29T12:05:24Z",
+      "side": 1,
+      "message": "minor: idem",
+      "range": {
+        "startLine": 1282,
+        "startChar": 4,
+        "endLine": 1282,
+        "endChar": 15
+      },
+      "revId": "4053405d522d744419ace2a2871ef0a13ab3ee6a",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735",
+      "unresolved": true
+    }
+  ]
+}
