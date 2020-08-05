@@ -77,8 +77,8 @@ should provide users with a good enough overview of how to use miniyaml.
    "age": 32
    ...
 
-    $ ./builddir/examples/emitter | ./builddir/examples/parser
-    person = {.name = test, .age = 32}
+   $ ./builddir/examples/emitter | ./builddir/examples/parser
+   person = {.name = test, .age = 32}
 
 .. _emitter: https://github.com/cea-hpc/miniyaml/tree/master/examples/emitter.c
 .. _parser: https://github.com/cea-hpc/miniyaml/tree/master/examples/parser.c
