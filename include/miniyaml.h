@@ -158,7 +158,7 @@ yaml_emit_document_end(yaml_emitter_t *emitter)
  * @return          the tag of \p event
  */
 static inline const char *
-yaml_mapping_tag(yaml_event_t *event)
+yaml_mapping_tag(const yaml_event_t *event)
 {
     assert(event->type == YAML_MAPPING_START_EVENT);
     return (char *)event->data.mapping_start.tag;
