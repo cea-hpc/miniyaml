@@ -513,6 +513,8 @@ yaml_emit_string(yaml_emitter_t *emitter, const char *string, size_t length)
  * @param event     a scalar event
  * @param string    a pointer to a const char *; on success, it is set to the
  *                  value \p event represents
+ * @param length    if not NULL, is set to the length of \p string on success
+ *                  (not including the null terminating byte)
  *
  * @return          true if \p event was successfully parsed as a string, false
  *                  otherwise and errno is set appropriately
