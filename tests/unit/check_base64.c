@@ -175,9 +175,7 @@ END_TEST
 
 START_TEST(bd_nothing)
 {
-    char input;
-
-    ck_assert_int_eq(base64_decode(NULL, &input, 0), 0);
+    ck_assert_int_eq(base64_decode(NULL, NULL, 0), 0);
 }
 END_TEST
 
