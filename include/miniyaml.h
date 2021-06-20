@@ -413,7 +413,7 @@ yaml_parse_boolean(const yaml_event_t *event, bool *b);
 static inline bool
 yaml_emit_integer(yaml_emitter_t *emitter, intmax_t i)
 {
-    char buffer[sizeof(intmax_t) * 4];
+    char buffer[sizeof(i) * 4];
     int n;
 
     n = snprintf(buffer, sizeof(buffer), "%"PRIiMAX, i);
@@ -451,7 +451,7 @@ yaml_parse_integer(const yaml_event_t *event, intmax_t *i);
 static inline bool
 yaml_emit_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
 {
-    char buffer[sizeof(uintmax_t) * 4];
+    char buffer[sizeof(u) * 4];
     int n;
 
     n = snprintf(buffer, sizeof(buffer), "%"PRIuMAX, u);
