@@ -416,7 +416,7 @@ yaml_emit_integer(yaml_emitter_t *emitter, intmax_t i)
     char buffer[sizeof(i) * 4];
     int n;
 
-    n = snprintf(buffer, sizeof(buffer), "%"PRIiMAX, i);
+    n = snprintf(buffer, sizeof(buffer), "%" PRIiMAX, i);
     return yaml_emit_scalar(emitter, NULL, buffer, n, YAML_PLAIN_SCALAR_STYLE);
 }
 
@@ -454,7 +454,7 @@ yaml_emit_unsigned_integer(yaml_emitter_t *emitter, uintmax_t u)
     char buffer[sizeof(u) * 4];
     int n;
 
-    n = snprintf(buffer, sizeof(buffer), "%"PRIuMAX, u);
+    n = snprintf(buffer, sizeof(buffer), "%" PRIuMAX, u);
     return yaml_emit_scalar(emitter, NULL, buffer, n, YAML_PLAIN_SCALAR_STYLE);
 }
 
