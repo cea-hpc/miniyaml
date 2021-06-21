@@ -22,6 +22,30 @@
       },
       "revId": "df95c7314011e8297869d0ecf4beef3cb668f117",
       "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d6d9b6_ba22bcd2",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1018755
+      },
+      "writtenOn": "2021-06-21T20:03:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "567ad554_78454916",
+      "range": {
+        "startLine": 516,
+        "startChar": 47,
+        "endLine": 516,
+        "endChar": 66
+      },
+      "revId": "df95c7314011e8297869d0ecf4beef3cb668f117",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
     }
   ]
 }
