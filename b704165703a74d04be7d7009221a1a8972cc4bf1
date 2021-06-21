@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af5b698b_9908b79a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1017196
+      },
+      "writtenOn": "2021-06-21T07:26:30Z",
+      "side": 1,
+      "message": "minor: I do not see any `yaml_sequence_tag()` function, but there is a `yaml_scalar_tag()`, did you mean this one?",
+      "range": {
+        "startLine": 9,
+        "startChar": 35,
+        "endLine": 9,
+        "endChar": 52
+      },
+      "revId": "b704165703a74d04be7d7009221a1a8972cc4bf1",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
