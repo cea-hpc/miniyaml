@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "567ad554_78454916",
+        "filename": "include/miniyaml.h",
+        "patchSetId": 2
+      },
+      "lineNbr": 516,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2021-06-21T07:50:16Z",
+      "side": 1,
+      "message": "question: does the length include the \u0027\\0\u0027 at the end? And is the string null terminated? I think this could be interesting to add in the documentation.",
+      "range": {
+        "startLine": 516,
+        "startChar": 47,
+        "endLine": 516,
+        "endChar": 66
+      },
+      "revId": "df95c7314011e8297869d0ecf4beef3cb668f117",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
