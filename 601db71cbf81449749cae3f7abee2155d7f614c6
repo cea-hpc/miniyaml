@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad6ea983_6309f350",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1019142
+      },
+      "writtenOn": "2021-06-22T06:36:31Z",
+      "side": 1,
+      "message": "typo: you forgot to change this one as well",
+      "range": {
+        "startLine": 10,
+        "startChar": 33,
+        "endLine": 10,
+        "endChar": 44
+      },
+      "revId": "601db71cbf81449749cae3f7abee2155d7f614c6",
+      "serverId": "d5d70762-12d0-45a1-890d-524b12d3f735"
+    }
+  ]
+}
