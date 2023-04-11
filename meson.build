@@ -7,7 +7,7 @@
 project(
 	'miniyaml',
 	'c',
-	version: '0.0.0',
+	version: '1.0.0',
 	license: 'LGPL3.0-or-later',
 	default_options: [
 		'werror=true',
@@ -15,7 +15,6 @@ project(
 )
 
 # Dependencies
-
 libyaml = dependency('yaml-0.1', version: '>=0.1.7')
 
 # GNU extensions
@@ -28,3 +27,4 @@ subdir('include')
 subdir('src')
 subdir('examples')
 subdir('tests')
+subdir('packaging')
